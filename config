@@ -1,0 +1,68 @@
+
+
+
+#I would like to know how many characters have been brought back from death.
+
+setMediaPath()
+
+#Question1:  How many charaters have been brought back from death?
+#death = 13
+#resurrection = 14
+
+def countDeath():
+  file = open(getMediaPath("avengersData.csv"),"rt")
+  lines = file.readlines()
+  file.close()
+  deathCount = 0
+  resurrection = 0
+  for line in lines[1:]:
+    parts = line.split(",")
+    if parts[13] == "YES":
+      deathCount = deathCount + 1
+      if parts[14]=="YES":
+        resurrection = resurrection + 1
+  return str(deathCount)+" characters are dead. "+ str(resurrection)+" characters are being resurrected after death."
+
+print countDeath()
+
+#Qestion2: Of female characters who died, how many of them are resurrected?
+def countFemaleWhoResurrected():
+  file = open(getMediaPath("avengersData.csv"),"rt")
+  lines = file.readlines()
+  file.close()
+  femaleCount = 0
+  resurrectCount = 0
+  for line in lines[1:]:
+    parts = line.split(",")
+    if parts[5] == "FEMALE" and parts[13] == "YES":
+        femaleCount = femaleCount + 1 
+        if parts[14] == "YES":
+          resurrectCount = resurrectCount + 1
+       
+  return "And "+str(resurrectCount)+" female charaters out of the "+str(femaleCount)+" are resurrected"
+
+mix = countDeath() + " " + countFemaleWhoResurrected()
+print mix
+
+
+#Question3: Of male characters who died, what is the percentage of them are resurrected?
+def percentsOfMaleAreResurrected():
+  file = open(getMediaPath("avengersData.csv"),"rt")
+  lines = file.readlines()
+  file.close()
+  maleCount = 0.00
+  resurrectCount=0.00
+  totalDeath = 0.00
+  for line in lines[1:]:
+    parts = line.split(",")
+    if parts[5]=="MALE" and parts[13]=="YES": #test whether the character is male and he is dead
+      maleCount=maleCount+1 #maleCount plus one when the character is male and dead
+      if parts[14]=="YES": #test whether the character resurrected
+        resurrectCount=resurrectCount+1 # plus one to resurrectCount when he returns
+  print "The percentage of male character are resurrected was: " + str(float(resurrectCount)/float(maleCount)*100)+"%"
+percentsOfMaleAreResurrected()
+  
+  
+# I have learned how to use Python to analyze data from csv file, which is what I always eager to learn from this class. 
+# I am able to calculate my data, and show them in way of percentage, also I can use python to do some simple math for me.
+# I might make my questions be more interesting and more diverse in the following project, since in this exercise my second and third questions are quit similar.
