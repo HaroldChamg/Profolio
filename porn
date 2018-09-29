@@ -1,0 +1,117 @@
+
+# coding: utf-8
+
+# Name: Harold, Chang
+# Reference: Data is Plural. Class note 18,19,22,27,28. Keegan.
+# I decided to use data from Data is plural instead using the data you offered on Canvas, because potentially as a data analyst it is very important to knwo where to find the data to analyze. Python covers many functions(photo-editting, data-analyzing, visualizing...etc)
+# , I personally am more interested in "Panda",therefore,I am going to use panda, crosstab function mainly for this motivtion notebook.
+#     
+# 
+
+# In[1]:
+
+
+get_ipython().run_line_magic('matplotlib', 'inline')
+import numpy as np
+import pandas as pd
+
+
+# First Step, let Pyhon read the CSV.
+# 
+
+# In[2]:
+
+
+Porn_df = pd.read_csv('xnxx.csv')
+Porn_df.head()
+
+
+# Knowing how many data I collected from PornHub
+# 
+
+# In[3]:
+
+
+len(Porn_df)
+
+
+# 
+# Knowing how many columns and the names of the column is important later when analyzing them.
+
+# In[4]:
+
+
+Porn_df.columns
+
+
+# Use .loc function to look at the column that I specificlly want to visualize(I know my data dont have many columns)
+# 
+
+# In[5]:
+
+
+Porn_df.loc[:,["title", "nb_comments"]]
+
+
+# I Honestly, filtered the data on Excel already, so I knew the number 1 comment video has nearly 20000 commetents, which is 8 times more than the number 2 comment video. Now I am trying to use .value function to let python does the same calculation for me
+
+# In[6]:
+
+
+Porn_df.sort_values(['nb_comments'],ascending=False).head()
+
+
+# In[7]:
+
+
+# print(Porn_df.loc[901526,"tags"])
+# for i in Porn_df.loc[901526,"tags"]:
+
+# tmp = Porn_df.loc[901526,"tags"].split(',')
+tag = []
+for item in Porn_df["tags"]:
+    tmp = []
+    for i in item.split(','):
+        tmp.append(i.strip("[' u']"))
+    tag.append(tmp)
+# print(tag)
+Porn_df['tag'] = pd.Series(tag, index=Porn_df.index)
+print(Porn_df['tag'].head())
+
+
+# In[20]:
+
+
+print(Porn_df.loc[:10,["tags", "tag"]])
+print(type(Porn_df.loc[901526,"tags"]))
+print(type(Porn_df.loc[901526,"tag"]))
+
+
+# Knowing the average of the comment is important if you need to compare the popularity og the movie. So here we can use
+# np.mean function. We can also play with these codes, np.min, np.median, np.max. 
+
+# In[ ]:
+
+
+Porn_crosstab = pd.crosstab(Porn_df['title'],[Porn_df["title"],Porn_df["nb_comments"]],
+                                         values=Porn_df["nb_comments"],aggfunc=np.mean)
+Porn_crosstab.head()
+
+
+
+
+
+
+# In[ ]:
+
+
+Comments_count = Porn_df['nb_comments'].value_counts().sort_index()
+ax = Comments_count.plot()
+ax.set_xlabel('Comments')
+ax.set_ylabel('Count')
+
+
+# In[ ]:
+
+
+Porn_df[Porn_df['nb_comments'].str.contains('virgin')]
